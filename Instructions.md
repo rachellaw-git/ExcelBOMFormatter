@@ -37,7 +37,7 @@ Excel stores global macros in a hidden workbook called `PERSONAL.XLSB`.
       ![[import_file2.png]]
    4. Double-click the created module to view or edit the script.
    5. **Save** your changes.
-      ![img.png](assets/imported_bas.png)
+      ![imported_bas.png](assets/imported_bas.png)
 
 > **Tip:** You may run into an error relating to a hidden workbook
 > `PERSONAL.XLSB` is hidden by default. To view it: **Excel → View → Unhide → select PERSONAL.XLSB**. Do **not** delete or rename it. When prompted about saving any changes to your personal workbook, do save the changes.
@@ -72,7 +72,7 @@ You can update a macro by either:
 
 1. Open the VBA Editor Project Explorer.
 2. Double-click the module to update.
-      ![[vba_editor_overwrite.png]]
+      ![vba_editor_overwrite.png](vba_editor_overwrite.png)
 3. Delete the current code and paste in the new script (can be opened in a text editor).
 4. **Save** your changes.
 5. Assign a shortcut (refer to Step 4: Assign a Shortcut to Your Global Macro).
@@ -82,7 +82,7 @@ You can update a macro by either:
 1. Open the VBA Editor Project Explorer.
 2. Right-click `VBAProject (PERSONAL.XLSB)` → **Import File...**
    - Select the file to import (e.g., `FormatBomForCadDatalink.bas`).
-      ![[import_file2.png]]
+      ![import_file2.png](assets/import_file2.png)
 3. Assign a shortcut (refer to Step 4: Assign a Shortcut to Your Global Macro).
 
 #### Remove the Old Macro
@@ -90,8 +90,4 @@ You can update a macro by either:
 1. Open the VBA Editor Project Explorer.
 2. Right-click the module you want to remove.
 3. Select **Remove [ModuleName]**.
-      ![[remove_module.png]]
-
----
-
-v2.0.0
+      ![remove_module.png](assets/remove_module.png)

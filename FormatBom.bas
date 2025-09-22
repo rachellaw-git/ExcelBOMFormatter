@@ -130,6 +130,9 @@ Sub FormatOriginalSheet(ws As Worksheet, billText As String, sectionText As Stri
 
     For Each col In centerCols.Keys: ws.Columns(col).HorizontalAlignment = xlCenter: Next
     For Each col In leftCols.Keys: ws.Columns(col).HorizontalAlignment = xlLeft: Next
+
+    ' apply wrapping + row autofit
+    ApplyWrappingAndAutofit ws
 End Sub
 
 '=======================
@@ -145,8 +148,33 @@ Sub PrepareCadSheet(ws As Worksheet, columnToRemove As String)
 
     ' Convert all text to uppercase
     For Each cell In ws.UsedRange
-        If VarType(cell.Value) = vbString Then cell.Value = UCase(cell.Value)
+        If VarType(cell.Value) = vbString Then
+            cell.Value = UCase(cell.Value)
+        End If
     Next cell
+
+    ' apply wrapping + row autofit
+    ApplyWrappingAndAutofit ws
+End Sub
+
+'=======================
+' APPLY WRAP + AUTOFIT WITH MIN ROW HEIGHT
+'=======================
+Sub ApplyWrappingAndAutofit(ws As Worksheet, Optional minRowHeight As Double = 15)
+    Dim cell As Range, r As Range
+
+    ' Enable wrap text for all used cells
+    For Each cell In ws.UsedRange
+        cell.WrapText = True
+    Next cell
+
+    ' Auto-fit row heights
+    ws.UsedRange.Rows.AutoFit
+
+    ' Enforce minimum row height for all used rows
+    For Each r In ws.UsedRange.Rows
+        If r.RowHeight < minRowHeight Then r.RowHeight = minRowHeight
+    Next r
 End Sub
 
 '=======================
