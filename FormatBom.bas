@@ -7,13 +7,14 @@ Sub FormatBom()
     '=======================
     ' USER CONFIGURATION
     '=======================
-    Dim newSheetName As String: newSheetName = "CAD"
-    Dim sheetSuffix As String: sheetSuffix = ""
+    Dim sectionTexts As Variant: sectionTexts = Array("SECTION", "SHIPPED")
+
     Dim columnToRemove As String: columnToRemove = "BPP SKU"
     Dim activateOriginal As Boolean: activateOriginal = True
+    Dim newSheetName As String: newSheetName = "CAD"
+    Dim sheetSuffix As String: sheetSuffix = ""
 
     Dim billOfMaterialText As String: billOfMaterialText = "BILL OF MATERIAL"
-    Dim sectionText As String: sectionText = "SECTION"
     Dim tableHeaders As Variant: tableHeaders = Array("ITEM#", "QTY", "BPP SKU", "MFR PART #", "MANUFACTURER", "DESCRIPTION")
 
     Dim centerAlignedColumns As Variant: centerAlignedColumns = Array("ITEM#", "QTY", "BPP SKU")
@@ -36,7 +37,7 @@ Sub FormatBom()
     Set originalSheet = wb.ActiveSheet
 
     ' Format the original sheet
-    FormatOriginalSheet originalSheet, billOfMaterialText, sectionText, tableHeaders, centerAlignedColumns, leftAlignedColumns
+    FormatOriginalSheet originalSheet, billOfMaterialText, sectionTexts, tableHeaders, centerAlignedColumns, leftAlignedColumns
 
     ' Determine new name for original sheet
     baseFileName = wb.Name
@@ -84,7 +85,7 @@ End Sub
 '=======================
 ' FORMAT ORIGINAL SHEET
 '=======================
-Sub FormatOriginalSheet(ws As Worksheet, billText As String, sectionText As String, _
+Sub FormatOriginalSheet(ws As Worksheet, billText As String, sectionTextsArr As Variant, _
                         tableHeaders As Variant, centerColsArr As Variant, leftColsArr As Variant)
     Dim cell As Range, cleanedText As String
     Dim centerDict As Object, leftDict As Object
@@ -109,7 +110,7 @@ Sub FormatOriginalSheet(ws As Worksheet, billText As String, sectionText As Stri
                     cell.Font.Size = 16
                     cell.Font.Bold = True
                     cell.HorizontalAlignment = xlCenter
-                Case UCase(Left(cleanedText, Len(sectionText))) = UCase(sectionText)
+                Case StartsWithAny(cleanedText, sectionTextsArr)
                     cell.Font.Size = 14
                     cell.Font.Bold = True
                     cell.HorizontalAlignment = xlCenter
@@ -153,6 +154,9 @@ Sub PrepareCadSheet(ws As Worksheet, columnToRemove As String)
         End If
     Next cell
 
+    ' Remove all fill colors
+    ws.UsedRange.Interior.ColorIndex = xlNone
+
     ' apply wrapping + row autofit
     ApplyWrappingAndAutofit ws
 End Sub
@@ -189,4 +193,19 @@ Function IsInArray(val As String, arr As Variant) As Boolean
         End If
     Next i
     IsInArray = False
+End Function
+
+'=======================
+' HELPER: Check if text starts with any text in array
+'=======================
+Function StartsWithAny(val As String, arr As Variant) As Boolean
+    Dim i As Long, sectionText As String
+    For i = LBound(arr) To UBound(arr)
+        sectionText = arr(i)
+        If UCase(Left(val, Len(sectionText))) = UCase(sectionText) Then
+            StartsWithAny = True
+            Exit Function
+        End If
+    Next i
+    StartsWithAny = False
 End Function
